@@ -119,7 +119,7 @@ class RowMatrix : public Matrix<T> {
    */
   RowMatrix(int rows, int cols) : Matrix<T>(rows, cols) {
     this->data_ = new T* [rows];
-    for (int i = 0; i < cols; ++i) {
+    for (int i = 0; i < rows; ++i) {
       this->data_[i] = new T [cols];
     }
   }
