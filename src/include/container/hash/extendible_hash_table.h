@@ -115,6 +115,9 @@ class ExtendibleHashTable : public HashTable<K, V> {
     /** @brief Check if a bucket is full. */
     inline auto IsFull() const -> bool { return list_.size() == size_; }
 
+    /** @brief Check if a bucket is empty. */
+    inline auto IsEmpty() const -> bool { return list_.empty(); }
+
     /** @brief Get the local depth of the bucket. */
     inline auto GetDepth() const -> int { return depth_; }
 
@@ -192,6 +195,7 @@ class ExtendibleHashTable : public HashTable<K, V> {
    * @return The entry index in the directory.
    */
   auto IndexOf(const K &key) -> size_t;
+  auto ComputeIndex(const K &key, int depth) -> size_t;
 
   auto GetGlobalDepthInternal() const -> int;
   auto GetLocalDepthInternal(int dir_index) const -> int;

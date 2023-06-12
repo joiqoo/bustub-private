@@ -10,7 +10,7 @@
 
 namespace bustub {
 
-TEST(ExtendibleHashTableTest, DISABLED_SampleTest) {
+TEST(ExtendibleHashTableTest, SampleTest) {
   auto table = std::make_unique<ExtendibleHashTable<int, std::string>>(2);
 
   table->Insert(1, "a");
@@ -40,9 +40,41 @@ TEST(ExtendibleHashTableTest, DISABLED_SampleTest) {
   EXPECT_TRUE(table->Remove(4));
   EXPECT_TRUE(table->Remove(1));
   EXPECT_FALSE(table->Remove(20));
+
+  auto table2 = std::make_unique<ExtendibleHashTable<int, std::string>>(3);
+  table2->Insert(16, "a");
+  table2->Insert(4, "b");
+  table2->Insert(6, "c");
+  table2->Insert(22, "d");
+  table2->Insert(24, "e");
+  table2->Insert(10, "f");
+  table2->Insert(31, "g");
+  table2->Insert(7, "h");
+  table2->Insert(9, "i");
+  table2->Insert(20, "j");
+  table2->Insert(26, "k");
+  EXPECT_EQ(3, table2->GetLocalDepth(0));
+  EXPECT_EQ(1, table2->GetLocalDepth(1));
+  EXPECT_EQ(3, table2->GetLocalDepth(2));
+  EXPECT_EQ(1, table2->GetLocalDepth(3));
+
+  std::string result2;
+  table2->Find(9, result2);
+  EXPECT_EQ("i", result2);
+  table2->Find(7, result2);
+  EXPECT_EQ("h", result2);
+  table2->Find(4, result2);
+  EXPECT_EQ("b", result2);
+  EXPECT_FALSE(table2->Find(21, result2));
+
+  EXPECT_TRUE(table2->Remove(7));
+  EXPECT_TRUE(table2->Remove(4));
+  EXPECT_TRUE(table2->Remove(10));
+  EXPECT_FALSE(table2->Remove(10));
+  EXPECT_FALSE(table2->Remove(11));
 }
 
-TEST(ExtendibleHashTableTest, DISABLED_ConcurrentInsertTest) {
+TEST(ExtendibleHashTableTest, ConcurrentInsertTest) {
   const int num_runs = 50;
   const int num_threads = 3;
 
