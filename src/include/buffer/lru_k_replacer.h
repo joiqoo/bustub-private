@@ -16,6 +16,7 @@
 #include <list>
 #include <mutex>  // NOLINT
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "common/config.h"
@@ -140,6 +141,15 @@ class LRUKReplacer {
   [[maybe_unused]] size_t replacer_size_;
   [[maybe_unused]] size_t k_;
   std::mutex latch_;
+
+  using timestamps = std::list<size_t>;
+  std::list<std::pair<frame_id_t, timestamps>> history_list_;
+  std::list<std::pair<frame_id_t, timestamps>> cache_list_;
+  std::unordered_map<frame_id_t, std::list<std::pair<frame_id_t, timestamps>>::iterator> location_;
+  //  std::unordered_map<frame_id_t,std::list<frame_id_t>::iterator> history_map;
+  //  std::unordered_map<frame_id_t,std::list<frame_id_t>::iterator> cache_map;
+  std::unordered_map<frame_id_t, size_t> count_map_;
+  std::unordered_map<frame_id_t, bool> evictable_map_;
 };
 
 }  // namespace bustub
