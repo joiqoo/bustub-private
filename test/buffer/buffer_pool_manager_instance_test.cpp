@@ -23,7 +23,7 @@ namespace bustub {
 
 // NOLINTNEXTLINE
 // Check whether pages containing terminal characters can be recovered
-TEST(BufferPoolManagerInstanceTest, DISABLED_BinaryDataTest) {
+TEST(BufferPoolManagerInstanceTest, BinaryDataTest) {
   const std::string db_name = "test.db";
   const size_t buffer_pool_size = 10;
   const size_t k = 5;
@@ -71,12 +71,21 @@ TEST(BufferPoolManagerInstanceTest, DISABLED_BinaryDataTest) {
     EXPECT_EQ(true, bpm->UnpinPage(i, true));
     bpm->FlushPage(i);
   }
+  //  EXPECT_EQ(0, memcmp(page0->GetData(), random_binary_data, BUSTUB_PAGE_SIZE));// !!!!!!!!!!!!!!!!!added
   for (int i = 0; i < 5; ++i) {
     EXPECT_NE(nullptr, bpm->NewPage(&page_id_temp));
     bpm->UnpinPage(page_id_temp, false);
   }
   // Scenario: We should be able to fetch the data we wrote a while ago.
   page0 = bpm->FetchPage(0);
+  //  std::cout << "=============================" << std::endl;
+  //  char test_data[BUSTUB_PAGE_SIZE];
+  //  disk_manager->ReadPage(0,test_data);
+  //  EXPECT_EQ(0, memcmp(test_data, random_binary_data, BUSTUB_PAGE_SIZE));
+  //  std::cout << random_binary_data << std::endl;
+  //  std::cout << "=============================" << std::endl;
+  //  std::cout << page0->GetData() << std::endl;
+  //  std::cout << "=============================" << std::endl;
   EXPECT_EQ(0, memcmp(page0->GetData(), random_binary_data, BUSTUB_PAGE_SIZE));
   EXPECT_EQ(true, bpm->UnpinPage(0, true));
 
@@ -89,7 +98,7 @@ TEST(BufferPoolManagerInstanceTest, DISABLED_BinaryDataTest) {
 }
 
 // NOLINTNEXTLINE
-TEST(BufferPoolManagerInstanceTest, DISABLED_SampleTest) {
+TEST(BufferPoolManagerInstanceTest, SampleTest) {
   const std::string db_name = "test.db";
   const size_t buffer_pool_size = 10;
   const size_t k = 5;
@@ -117,15 +126,19 @@ TEST(BufferPoolManagerInstanceTest, DISABLED_SampleTest) {
   for (size_t i = buffer_pool_size; i < buffer_pool_size * 2; ++i) {
     EXPECT_EQ(nullptr, bpm->NewPage(&page_id_temp));
   }
+  //  std::cout << "============test above passed=================" << std::endl;
 
   // Scenario: After unpinning pages {0, 1, 2, 3, 4} and pinning another 4 new pages,
   // there would still be one buffer page left for reading page 0.
   for (int i = 0; i < 5; ++i) {
     EXPECT_EQ(true, bpm->UnpinPage(i, true));
   }
+  //  std::cout << "============test above passed=================" << std::endl;
   for (int i = 0; i < 4; ++i) {
+    //    std::cout << i << std::endl;
     EXPECT_NE(nullptr, bpm->NewPage(&page_id_temp));
   }
+  //  std::cout << "============test above passed=================" << std::endl;
 
   // Scenario: We should be able to fetch the data we wrote a while ago.
   page0 = bpm->FetchPage(0);
@@ -133,7 +146,9 @@ TEST(BufferPoolManagerInstanceTest, DISABLED_SampleTest) {
 
   // Scenario: If we unpin page 0 and then make a new page, all the buffer pages should
   // now be pinned. Fetching page 0 should fail.
+  //  std::cout << "pin count: " << page0->GetPinCount() << std::endl;
   EXPECT_EQ(true, bpm->UnpinPage(0, true));
+  //  std::cout << "pin count: " << page0->GetPinCount() << std::endl;
   EXPECT_NE(nullptr, bpm->NewPage(&page_id_temp));
   EXPECT_EQ(nullptr, bpm->FetchPage(0));
 

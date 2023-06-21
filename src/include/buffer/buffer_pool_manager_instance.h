@@ -117,6 +117,7 @@ class BufferPoolManagerInstance : public BufferPoolManager {
    * @return false if the page could not be found in the page table, true otherwise
    */
   auto FlushPgImp(page_id_t page_id) -> bool override;
+  auto FlushPgImpInternal(page_id_t page_id) -> bool;
 
   /**
    * TODO(P1): Add implementation
